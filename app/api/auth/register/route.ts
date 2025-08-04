@@ -18,7 +18,7 @@ export async function POST(request: Request) {
     });
 
     if (existingUser) {
-      return new NextResponse('User with this email already exists', { status: 409 }); // 409 Conflict
+      return new NextResponse('User with this email already exists', { status: 409 }); //409 Conflict
     }
 
     //Hash password
