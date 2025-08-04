@@ -1,0 +1,410 @@
+{
+	"info": {
+		"_postman_id": "32337515-74a6-44cf-87e5-1e699e3c158d",
+		"name": "Script API Testing",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29684322"
+	},
+	"item": [
+		{
+			"name": "Registrasi",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"user.asing@example.com\",\r\n  \"password\": \"password789\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/api/auth/register",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"test@example.com\",\r\n  \"password\": \"password123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/api/auth/login",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Logout",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/api/auth/logout",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add projects",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"name\": \"Proyek Manajemen User\" }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/api/projects",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"projects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get all projects",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/api/projects",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"projects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get projects by id",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"name\": \"Proyek Pertamaku [Edited]\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/api/projects/:id_project",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"projects",
+						":id_project"
+					],
+					"variable": [
+						{
+							"key": "id_project",
+							"value": "989cbf96-3557-46fd-ab50-d475298c1579"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update projects",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/api/projects/:id_project",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"projects",
+						":id_project"
+					],
+					"variable": [
+						{
+							"key": "id_project",
+							"value": ""
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete project",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseURL}}/api/projects/:id_project",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"projects",
+						":id_project"
+					],
+					"variable": [
+						{
+							"key": "id_project",
+							"value": "3291522c-e5bf-4a91-aba9-7aba40880ede"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add task",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"Buat halaman login\",\r\n  \"description\": \"Desain dan implementasikan UI untuk halaman login.\",\r\n  \"status\": \"todo\" \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/api/projects/:id_project/tasks",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"projects",
+						":id_project",
+						"tasks"
+					],
+					"variable": [
+						{
+							"key": "id_project",
+							"value": "989cbf96-3557-46fd-ab50-d475298c1579"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get tasks project",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"Buat halaman login\",\r\n  \"description\": \"Desain dan implementasikan UI untuk halaman login.\",\r\n  \"status\": \"todo\" \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/api/projects/:id_project/tasks",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"projects",
+						":id_project",
+						"tasks"
+					],
+					"variable": [
+						{
+							"key": "id_project",
+							"value": "989cbf96-3557-46fd-ab50-d475298c1579"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update tasks project",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"title\": \"Buat halaman login\",\r\n  \"description\": \"Desain dan implementasikan UI untuk halaman login.\",\r\n  \"status\": \"in-progress\" \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/api/projects/:id_project/tasks/:task_id",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"projects",
+						":id_project",
+						"tasks",
+						":task_id"
+					],
+					"variable": [
+						{
+							"key": "id_project",
+							"value": "989cbf96-3557-46fd-ab50-d475298c1579"
+						},
+						{
+							"key": "task_id",
+							"value": "42df0d41-4156-4211-b400-9da776135a72"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add member projects",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"userId\": \"97484df7-63db-4ed7-9314-e95sdd4d0dc6632\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/api/projects/:id_project/members",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"projects",
+						":id_project",
+						"members"
+					],
+					"variable": [
+						{
+							"key": "id_project",
+							"value": "989cbf96-3557-46fd-ab50-d475298c1579"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get member projects",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"userId\": \"97484df7-63db-4ed7-9314-e95sdd4d0dc6632\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/api/projects/:id_project/members",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"api",
+						"projects",
+						":id_project",
+						"members"
+					],
+					"variable": [
+						{
+							"key": "id_project",
+							"value": "989cbf96-3557-46fd-ab50-d475298c1579"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "http://localhost:3000",
+			"type": "default"
+		}
+	]
+}
