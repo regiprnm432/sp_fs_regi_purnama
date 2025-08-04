@@ -1,9 +1,7 @@
-// app/dashboard/page.tsx
 import { cookies } from "next/headers";
 import { jwtVerify } from "jose";
 import prisma from "@/lib/prisma";
 import Link from "next/link";
-// --- DIPERBAIKI: Mengimpor tipe Project secara langsung ---
 import type { Project } from "@prisma/client";
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
