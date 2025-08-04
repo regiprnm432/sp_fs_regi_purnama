@@ -6,48 +6,27 @@ import type { Project } from "@prisma/client";
 
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { CreateProjectButton } from "./CreateProjectButton";
+import { LogoutButton } from "./LogoutButton"; // <-- Import tombol logout
 
-// Tipe untuk data user dari JWT
 interface UserPayload {
   userId: string;
   email: string;
-  iat: number;
-  exp: number;
 }
 
-// Mendefinisikan tipe secara manual untuk mencakup relasi
 type ProjectWithDetails = Project & {
-  _count: {
-    tasks: number;
-  };
-  owner: {
-    email: string | null;
-  };
+  _count: { tasks: number };
+  owner: { email: string | null };
 };
 
-
-// Fungsi untuk mengambil data project dengan tipe return yang jelas
 async function getProjects(userId: string): Promise<ProjectWithDetails[]> {
   const projects = await prisma.project.findMany({
-    where: {
-      OR: [
-        { ownerId: userId },
-        { memberships: { some: { userId: userId } } },
-      ],
-    },
+    where: { OR: [{ ownerId: userId }, { memberships: { some: { userId } } }] },
     include: {
-      _count: {
-        select: { tasks: true },
-      },
-      owner: {
-        select: { email: true }
-      }
+      _count: { select: { tasks: true } },
+      owner: { select: { email: true } }
     },
-    orderBy: {
-      updatedAt: 'desc',
-    },
+    orderBy: { updatedAt: 'desc' },
   });
-  // Type assertion untuk memastikan tipe data sesuai
   return projects as ProjectWithDetails[];
 }
 
@@ -56,29 +35,24 @@ export default async function DashboardPage() {
   const token = cookieStore.get("token")?.value;
   
   if (!token) {
-    // Ini seharusnya tidak terjadi karena ada middleware, tapi sebagai pengaman
     return <div>Unauthorized</div>;
   }
 
-  // Decode token untuk mendapatkan userId
-  const { payload } = await jwtVerify(
-    token,
-    new TextEncoder().encode(process.env.JWT_SECRET)
-  ) as { payload: UserPayload };
-  
+  const { payload } = await jwtVerify(token, new TextEncoder().encode(process.env.JWT_SECRET)) as { payload: UserPayload };
   const projects = await getProjects(payload.userId);
 
   return (
-    <div className="container mx-auto py-8">
+    <div className="container mx-auto p-4 sm:p-6 lg:p-8">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Your Projects</h1>
-        <CreateProjectButton />
+        <h1 className="text-3xl font-bold">Proyek Anda</h1>
+        <div className="flex items-center gap-4">
+          <CreateProjectButton />
+          <LogoutButton />
+        </div>
       </div>
-
       {projects.length === 0 ? (
         <div className="text-center py-10 border-2 border-dashed rounded-lg">
-          <p className="text-gray-500">You don&apos;t have any projects yet.</p>
-          <p className="text-gray-400 text-sm">Click "Create New Project" to get started.</p>
+          <p className="text-muted-foreground">Anda belum memiliki proyek.</p>
         </div>
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -87,14 +61,10 @@ export default async function DashboardPage() {
               <Card className="hover:border-primary transition-colors">
                 <CardHeader>
                   <CardTitle>{project.name}</CardTitle>
-                  <CardDescription>
-                    Owned by: {project.owner.email}
-                  </CardDescription>
+                  <CardDescription>Dimiliki oleh: {project.owner.email}</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-sm text-gray-500">
-                    {project._count.tasks} task(s)
-                  </div>
+                  <p className="text-sm text-muted-foreground">{project._count.tasks} tugas</p>
                 </CardContent>
               </Card>
             </Link>

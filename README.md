@@ -1,36 +1,103 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🛩️ Aplikasi Manajemen Proyek Multi-Pengguna
 
-## Getting Started
+Aplikasi manajemen proyek multi-pengguna yang dibangun sebagai bagian dari tes teknis. Aplikasi ini memungkinkan pengguna untuk:
 
-First, run the development server:
+- Mendaftar & login
+- Membuat proyek
+- Mengundang anggota lain
+- Mengelola tugas dalam sebuah papan Kanban interaktif
+
+---
+
+## 🚀 Teknologi yang Digunakan
+
+- **Framework**: Next.js (App Router)
+- **Bahasa**: TypeScript
+- **Styling**: Tailwind CSS
+- **Komponen UI**: [Shadcn UI](https://ui.shadcn.com/)
+- **ORM**: Prisma
+- **Database**: SQLite
+- **Autentikasi**: JWT (JSON Web Tokens)
+
+---
+
+## ⚙️ Cara Menjalankan Proyek Secara Lokal
+
+### 1. Prasyarat
+
+Pastikan Anda sudah menginstal:
+
+- [Node.js](https://nodejs.org/) v18 atau lebih baru
+- npm atau package manager lain seperti pnpm/yarn
+
+### 2. Instalasi
+
+Clone repositori ini:
+
+```bash
+git clone [URL_REPOSITORI_ANDA]
+cd [NAMA_FOLDER_PROYEK_ANDA]
+```
+
+Instal semua dependensi:
+
+```bash
+npm install
+```
+
+### 3. Pengaturan Database (Prisma)
+
+Proyek ini menggunakan SQLite, jadi tidak perlu instalasi server database terpisah.
+
+#### a. Buat file `.env`
+
+Salin file `.env.example` dan ubah namanya menjadi `.env`:
+
+```bash
+cp .env.example .env
+```
+
+#### b. Isi Environment Variables
+
+Edit file `.env` dan isi variabel yang dibutuhkan:
+
+```
+DATABASE_URL="file:./dev.db"
+JWT_SECRET="ISI_DENGAN_STRING_ACAK_YANG_AMAN"
+```
+
+#### c. Jalankan Migrasi Database
+
+```bash
+npx prisma migrate dev
+```
+
+#### d. (Opsional) Lihat Isi Database via Prisma Studio
+
+```bash
+npx prisma studio
+```
+
+### 4. Menjalankan Aplikasi
+
+Setelah semua selesai, jalankan server development:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Aplikasi akan berjalan di `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## ✨ Fitur Utama
 
-## Learn More
+- ✅ Autentikasi pengguna (Register & Login)
+- ✅ Pembuatan dan pengelolaan proyek
+- ✅ Sistem undangan member berbasis email
+- ✅ Papan Kanban untuk manajemen tugas (To Do, In Progress, Done)
+- ✅ Drag-and-Drop antar kolom status
+- ✅ Grafik analisis jumlah tugas per status
+- ✅ Ekspor data proyek ke format JSON
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---

@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import type { User, Membership, Project } from "@prisma/client";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -78,6 +77,12 @@ export function SettingsClient({ project, members }: SettingsClientProps) {
     router.refresh();
   };
 
+  // Fungsi untuk menangani export data ---
+  const handleExport = () => {
+    // Buka URL API di tab baru, browser akan otomatis mengunduh file
+    window.open(`/api/projects/${project.id}/export`, '_blank');
+  };
+
   return (
     <div className="space-y-8">
       {/* Bagian Invite Member */}
@@ -132,6 +137,17 @@ export function SettingsClient({ project, members }: SettingsClientProps) {
             </div>
           ))}
         </div>
+      </div>
+
+      {/* --- Bagian Data Management --- */}
+      <div className="rounded-lg border p-4">
+        <h3 className="text-lg font-medium">Data Management</h3>
+        <p className="text-sm text-muted-foreground">
+          Export all project data including tasks and members to a JSON file.
+        </p>
+        <Button variant="outline" className="mt-4" onClick={handleExport}>
+          Export Project Data
+        </Button>
       </div>
 
       {/* Bagian Danger Zone */}

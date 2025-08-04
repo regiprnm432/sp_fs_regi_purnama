@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import type { Task, User, Membership } from "@prisma/client";
 import {
@@ -83,7 +83,7 @@ function TaskColumn({
   tasks: FullTask[];
   onTaskClick: (task: FullTask) => void;
 }) {
-  const { setNodeRef } = useSortable({ id }); // Membuat kolom itu sendiri sebagai target
+  const { setNodeRef } = useSortable({ id });
   const taskIds = useMemo(() => tasks.map((t) => t.id), [tasks]);
 
   return (
@@ -113,7 +113,17 @@ export function TaskBoard({ initialTasks, members, projectId }: TaskBoardProps) 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<FullTask | null>(null);
 
-  const sensors = useSensors(useSensor(PointerSensor));
+  useEffect(() => {
+    setTasks(initialTasks);
+  }, [initialTasks]);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 5,
+      },
+    })
+  );
 
   const taskColumns = useMemo(() => {
     const columns: { [key: string]: FullTask[] } = {
@@ -129,28 +139,19 @@ export function TaskBoard({ initialTasks, members, projectId }: TaskBoardProps) 
     return columns;
   }, [tasks]);
 
-  // Logika untuk menangani event drag-end ---
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-
     if (!over) return;
-
     const activeId = active.id;
     const overId = over.id;
-
     if (activeId === overId) return;
-
     const activeTask = tasks.find((t) => t.id === activeId);
     if (!activeTask) return;
-
-    // Tentukan status baru berdasarkan kolom tempat task diletakkan
     const overIsColumn = ['todo', 'in-progress', 'done'].includes(String(overId));
     let newStatus = activeTask.status;
-
     if (overIsColumn) {
       newStatus = String(overId);
     } else {
-      // Cari kolom dari task yang berada di bawahnya
       for (const status in taskColumns) {
         if (taskColumns[status].some((task) => task.id === overId)) {
           newStatus = status;
@@ -158,25 +159,19 @@ export function TaskBoard({ initialTasks, members, projectId }: TaskBoardProps) 
         }
       }
     }
-
     if (newStatus === activeTask.status) return;
-
-    // Update UI secara optimis
     setTasks((prevTasks) =>
       prevTasks.map((task) =>
         task.id === activeId ? { ...task, status: newStatus } : task
       )
     );
-
-    // Panggil API untuk menyimpan perubahan di database
     fetch(`/api/projects/${projectId}/tasks/${active.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus })
     }).catch(err => {
-        // Jika gagal, kembalikan ke state semula (opsional)
         console.error("Failed to update task status:", err);
-        setTasks(initialTasks); // atau tampilkan pesan error
+        setTasks(initialTasks);
     });
   };
 
@@ -209,7 +204,6 @@ export function TaskBoard({ initialTasks, members, projectId }: TaskBoardProps) 
             <TaskColumn id="done" title="Done" tasks={taskColumns.done} onTaskClick={handleTaskClick} />
           </div>
         </div>
-
         <DialogContent>
           <DialogHeader>
             <DialogTitle>{editingTask ? "Edit Task" : "Add New Task"}</DialogTitle>

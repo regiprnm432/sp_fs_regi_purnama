@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { Task, User, Membership } from "@prisma/client";
 
 import { Button } from "@/components/ui/button";
@@ -24,7 +24,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-// Tipe data yang diperluas
 type FullTask = Task & { assignee: User | null };
 type FullMember = Membership & { user: User };
 
@@ -54,13 +53,23 @@ export function TaskForm({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      title: "",
+      description: "",
+      status: "todo",
+      assigneeId: undefined,
+    },
+  });
+
+  useEffect(() => {
+    form.reset({
       title: initialData?.title || "",
       description: initialData?.description || "",
       status: initialData?.status || "todo",
       assigneeId: initialData?.assigneeId || undefined,
-    },
-  });
+    });
+  }, [initialData, form.reset]);
 
+  // Fungsi untuk mengirim data (membuat atau mengupdate)
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
     setError(null);
@@ -82,6 +91,26 @@ export function TaskForm({
       
       onSubmitSuccess();
 
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  // Fungsi untuk menghapus task ---
+  async function handleDelete() {
+    if (!initialData) return;
+    setIsLoading(true);
+    setError(null);
+    try {
+      const response = await fetch(`/api/projects/${projectId}/tasks/${initialData.id}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) {
+        throw new Error("Failed to delete task.");
+      }
+      onSubmitSuccess();
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -154,6 +183,7 @@ export function TaskForm({
                     </SelectTrigger>
                     </FormControl>
                     <SelectContent>
+                    <SelectItem value="unassigned">Unassigned</SelectItem>
                     {members.map((member) => (
                         <SelectItem key={member.userId} value={member.userId}>
                         {member.user.email}
@@ -167,9 +197,21 @@ export function TaskForm({
             />
         </div>
         {error && <p className="text-sm font-medium text-destructive">{error}</p>}
-        <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? "Saving..." : "Save Task"}
-        </Button>
+        <div className="flex justify-between items-center pt-4">
+            <div>
+                {initialData && ( // Tampilkan tombol hapus hanya saat mengedit
+                    <Button type="button" variant="destructive" onClick={handleDelete} disabled={isLoading}>
+                        Delete
+                    </Button>
+                )}
+            </div>
+            <div className="flex gap-2">
+                <Button type="button" variant="secondary" onClick={onSubmitSuccess}>Cancel</Button>
+                <Button type="submit" disabled={isLoading}>
+                    {isLoading ? "Saving..." : "Save Task"}
+                </Button>
+            </div>
+        </div>
       </form>
     </Form>
   );
