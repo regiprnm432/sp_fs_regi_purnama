@@ -30,8 +30,12 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
+# env files
+# Abaikan file .env utama (karena berisi rahasia)...
 .env
+
+# ...tapi JANGAN abaikan file .env.example.
+!.env.example
 
 # vercel
 .vercel
